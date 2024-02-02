@@ -8,7 +8,7 @@ import (
 
 const testFilesFolder = "./test_files/"
 
-func TestRun(t *testing.T) {
+func TestCheckFile(t *testing.T) {
 	tests := []struct {
 		path   string
 		exists bool
@@ -20,6 +20,10 @@ func TestRun(t *testing.T) {
 		{
 			path:   "anything.json",
 			exists: false,
+		},
+		{
+			path:   "file",
+			exists: true,
 		},
 	}
 

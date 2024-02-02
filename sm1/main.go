@@ -44,10 +44,15 @@ func main() {
 func CheckFile(p string) error {
 	st, err := os.Stat(strings.Trim(p, " "))
 	if err != nil {
-		return fmt.Errorf("failed to find file or dir: %v \n", err)
+		return fmt.Errorf("failed to find file or dir: %w \n", err)
 	}
 
 	parts := strings.Split(st.Name(), ".")
+
+	if len(parts) == 1 {
+		fmt.Printf("filename: %s\n", parts[0])
+		return nil
+	}
 
 	// fName := path.Base(p)
 	// ext := path.Base(p)
