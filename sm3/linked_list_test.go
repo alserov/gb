@@ -9,9 +9,9 @@ func TestNewList(t *testing.T) {
 	l := NewCollection(LINKED_LIST)
 
 	t.Run("testing linked list collection implementation", func(t *testing.T) {
-		l.Push("link1", WithName("My First Link"))
+		l.Push("link1", WithName("My First Link"), WithTags([]string{"tag"}))
 
-		count, err := l.Delete("link1")
+		count, err := l.Delete("", WithTag("tag"))
 		require.NoError(t, err)
 		require.Equal(t, 1, count)
 
@@ -36,9 +36,14 @@ func TestNewList(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, 1, count)
 
-		require.Equal(t, l.Length(), len(l.All()))
+		links, err = l.All()
+		require.NoError(t, err)
+
+		require.Equal(t, l.Length(), len(links))
 
 		l.Clear()
-		require.Equal(t, l.Length(), len(l.All()))
+		links, err = l.All()
+		require.NoError(t, err)
+		require.Equal(t, l.Length(), len(links))
 	})
 }

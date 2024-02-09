@@ -1,6 +1,7 @@
 package main
 
 import (
+	"slices"
 	"time"
 )
 
@@ -10,28 +11,29 @@ type withList struct {
 	len  int
 }
 
-func (w *withList) Clear() {
+func (w *withList) Clear() error {
 	w.head, w.tail, w.len = nil, nil, 0
+	return nil
 }
 
-func (w *withList) All() []Item {
+func (w *withList) All() ([]Item, error) {
 	all := make([]Item, 0, w.len)
 	c := w.tail
 	for c != nil {
 		all = append(all, *c)
 		c = c.next
 	}
-	return all
+	return all, nil
 }
 
 func (w *withList) Length() int {
 	return w.len
 }
 
-func (w *withList) Delete(link string, p ...DeleteOption) (int, error) {
+func (w *withList) Delete(link string, opts ...Option) (int, error) {
 	prms := Params{}
 
-	for _, prm := range p {
+	for _, prm := range opts {
 		prm(&prms)
 	}
 
@@ -50,7 +52,7 @@ func (w *withList) Delete(link string, p ...DeleteOption) (int, error) {
 				currItem = currItem.next
 			}()
 
-			if link == currItem.Link {
+			if link == currItem.Link || prms.Tag != nil && slices.Contains(currItem.Tags, *prms.Tag) {
 				if prms.Limit != nil {
 					if prms.currentLimit >= *prms.Limit {
 						return false
@@ -83,10 +85,10 @@ func (w *withList) Delete(link string, p ...DeleteOption) (int, error) {
 	}
 }
 
-func (w *withList) Get(link string, p ...GetOption) ([]Item, error) {
+func (w *withList) Get(link string, opts ...Option) ([]Item, error) {
 	prms := Params{}
 
-	for _, prm := range p {
+	for _, prm := range opts {
 		prm(&prms)
 	}
 
@@ -121,7 +123,7 @@ func (w *withList) Get(link string, p ...GetOption) ([]Item, error) {
 	}
 }
 
-func (w *withList) Push(val string, opts ...PushOption) {
+func (w *withList) Push(val string, opts ...PushOption) error {
 	i := Item{
 		Link: val,
 		Date: time.Now(),
@@ -135,10 +137,12 @@ func (w *withList) Push(val string, opts ...PushOption) {
 		w.head = &i
 		w.tail = &i
 		w.len++
-		return
+		return nil
 	}
 
 	w.head.next = &i
 	w.head = w.head.next
 	w.len++
+
+	return nil
 }
