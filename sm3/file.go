@@ -92,8 +92,8 @@ func (w *withFile) Delete(link string, opts ...Option) (int, error) {
 	for i := 0; i < len(state); i++ {
 		if state[i].Link == link || prms.Tag != nil && slices.Contains(state[i].Tags, *prms.Tag) {
 			if prms.Limit != nil {
-				if *prms.Limit < prms.currentLimit {
-					return prms.currentLimit, nil
+				if *prms.Limit <= prms.currentLimit {
+					break
 				}
 			}
 			if prms.Offset != nil {
@@ -103,6 +103,7 @@ func (w *withFile) Delete(link string, opts ...Option) (int, error) {
 				}
 			}
 			state = append(state[:i], state[i+1:]...)
+			i--
 			prms.currentLimit++
 		}
 	}
@@ -158,8 +159,20 @@ func (w *withFile) Get(link string, opts ...Option) ([]Item, error) {
 
 	var res []Item
 	for _, i := range state {
-		if i.Link == link || i.Tags != nil && slices.Contains(i.Tags, *prms.Tag) {
+		if i.Link == link || prms.Tag != nil && slices.Contains(i.Tags, *prms.Tag) {
+			if prms.Limit != nil {
+				if *prms.Limit <= prms.currentLimit {
+					break
+				}
+			}
+			if prms.Offset != nil {
+				if *prms.Offset > prms.currentOffset {
+					prms.currentOffset++
+					continue
+				}
+			}
 			res = append(res, i)
+			prms.currentLimit++
 		}
 	}
 
