@@ -54,6 +54,12 @@ func (r *repository) DeleteUser(ctx context.Context, userID models.ID) error {
 	delete(r.names, v.Username)
 	delete(r.users, string(userID))
 
+	for _, frshp := range r.friendships {
+		if frshp.ReceiverID == userID || frshp.InitiatorID == userID {
+			delete(r.friendships, fmt.Sprintf("%s%s", frshp.ReceiverID, frshp.InitiatorID))
+		}
+	}
+
 	return nil
 }
 
