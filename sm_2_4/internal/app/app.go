@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/alserov/fuze"
 	"github.com/alserov/gb/sm_2_4/internal/config"
-	"github.com/alserov/gb/sm_2_4/internal/db/hashtable"
+	"github.com/alserov/gb/sm_2_4/internal/db/postgres"
 	"github.com/alserov/gb/sm_2_4/internal/log"
 	"github.com/alserov/gb/sm_2_4/internal/routes"
 	"github.com/alserov/gb/sm_2_4/internal/server"
@@ -35,7 +35,7 @@ func MustStart(cfg *config.Config) {
 	a := fuze.NewApp(fuze.WithAddr(addr), fuze.WithTimeouts(cfg.Timeout.Read, cfg.Timeout.Write))
 
 	// repo
-	repo := hashtable.NewHashtableRepository()
+	repo := postgres.NewRepository(postgres.MustConnect(cfg.DB.Addr))
 
 	// bll
 	srvc := service.NewService(l, repo)

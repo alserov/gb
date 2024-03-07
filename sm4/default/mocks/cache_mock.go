@@ -16,7 +16,7 @@ type MockCache struct {
 	recorder *MockCacheMockRecorder
 }
 
-// MockCacheMockRecorder is the mock recorder for MockCache.
+// MockCacheMockRecorder is the mock writer for MockCache.
 type MockCacheMockRecorder struct {
 	mock *MockCache
 }

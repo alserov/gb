@@ -3,3 +3,5 @@ port: 3001
 timeout:
   read: 3s
   write: 4s
+db:
+  addr: postgresql://admin:1787@localhost:4000/db?sslmode=disable

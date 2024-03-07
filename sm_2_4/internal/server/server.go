@@ -39,14 +39,8 @@ type server struct {
 }
 
 func (s server) CreateUser(c *fuze.Ctx) {
-	// в каждом хэндлере тут стоит сделать валидацию, возможно caching
-	//
 	// также в DeleteUser, SuggestFriendship, AnswerOnFriendshipSuggestion, GetAllFriendshipSuggestions нужно проверять
 	// может ли клиент редактировать такие данные, (например) в куки jwt токен засунуть и проверять его валидность
-	//
-	//
-	// да и конвертацию между моделями слоев controller и service стоит сделать, но мне лень)
-
 	var req models.CreateUserReq
 	if err := c.Decode(&req); err != nil {
 		c.SendStatus(http.StatusBadRequest)

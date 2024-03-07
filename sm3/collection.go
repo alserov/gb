@@ -25,7 +25,7 @@ type (
 const (
 	LINKED_LIST ListType = iota
 	FILE
-	// also can be used a map
+	// also can be used a hashtable
 )
 
 func NewCollection(t ListType) List {

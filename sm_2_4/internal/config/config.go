@@ -14,6 +14,9 @@ type Config struct {
 		Read  time.Duration `yaml:"read"`
 		Write time.Duration `yaml:"write"`
 	} `yaml:"timeout"`
+	DB struct {
+		Addr string `yaml:"addr"`
+	}
 }
 
 func MustLoad() *Config {

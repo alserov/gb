@@ -1,8 +1,10 @@
 package routes
 
 import (
+	"fmt"
 	"github.com/alserov/fuze"
 	"github.com/alserov/gb/sm_2_4/internal/server"
+	"net/http"
 )
 
 func Setup(ctrl *fuze.Controller, s server.Server) {
@@ -13,4 +15,9 @@ func Setup(ctrl *fuze.Controller, s server.Server) {
 	ctrl.POST("user", s.CreateUser)
 	ctrl.DELETE("user/{user_id}", s.DeleteUser)
 	ctrl.GET("user/{user_id}", s.GetAllFriends)
+
+	ctrl.GET("/test", func(c *fuze.Ctx) {
+		fmt.Println("received request")
+		c.SendValue([]byte("ok"), http.StatusOK)
+	})
 }
